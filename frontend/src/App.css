@@ -1,0 +1,44 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.app {
+  display: flex;
+}
+
+.sidebar {
+  width: 250px;
+  background: #1e293b;
+  color: white;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+}
+
+.sample-btn {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+.input-area {
+  margin-top: 20px;
+}
+
+.user-message {
+  background: #dbeafe;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+.bot-message {
+  background: #f1f5f9;
+  padding: 10px;
+  margin-bottom: 20px;
+}
