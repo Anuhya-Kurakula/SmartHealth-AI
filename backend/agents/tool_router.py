@@ -155,10 +155,7 @@ def route_tool(question):
 
     # Default → RAG
     else:
-
-        result = rag_response(question)
-
         return {
-            "answer": result["answer"],
-            "sources": result["sources"]
-        }
+              "answer": generate_general_answer(question),
+        "sources": ["Groq LLM"]
+    }
