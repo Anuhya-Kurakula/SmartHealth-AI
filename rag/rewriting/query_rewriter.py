@@ -1,14 +1,15 @@
 import os
 from groq import Groq
+from rag.memory.conversation_memory import get_memory
 
 client = Groq(
-    api_key=os.getenv("GROQ_API_KEY")
+    api_key="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"
 )
 
 
 def rewrite_query(question):
 
-    # Only rewrite follow-up questions
+    # Rewrite only follow-up questions
     rewrite_keywords = [
         "symptoms",
         "treatment",

@@ -9,6 +9,7 @@ from rag.generation.llm import (
 )
 
 from rag.memory.conversation_memory import add_to_memory
+from rag.memory.database_memory import save_chat
 from rag.rewriting.query_rewriter import rewrite_query
 from rag.reranking.reranker import rerank_documents
 
@@ -56,7 +57,7 @@ def ask_question(question):
     print("Best Score:", best_score)
 
     # Lower score = better match
-    if best_score < 1.0:
+    if best_score < 0.7:
 
         docs = [
             doc
@@ -73,7 +74,6 @@ def ask_question(question):
             question
         )
 
-        # Context doesn't contain answer
         if answer == "NOT_FOUND":
 
             print("PDF answer not found. Using Groq.")
@@ -110,8 +110,14 @@ def ask_question(question):
             "Groq General Knowledge"
         ]
 
-    # Step 4: Save conversation memory
+    # Step 4: Temporary Memory
     add_to_memory(
+        question,
+        answer
+    )
+
+    # Step 5: Persistent Database Memory
+    save_chat(
         question,
         answer
     )

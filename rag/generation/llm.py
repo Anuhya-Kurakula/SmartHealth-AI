@@ -1,14 +1,22 @@
+
 import os
 from groq import Groq
+from rag.memory.database_memory import get_recent_chats
+from rag.memory.conversation_memory import get_memory
+
+
+# Initialize Groq client
 
 client = Groq(
-    api_key=os.getenv("GROQ_API_KEY")
+    api_key = "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"
 )
 
 
 def generate_answer(context, question):
 
     prompt = f"""
+You are SmartHealth AI.
+
 Context:
 {context}
 
@@ -16,9 +24,9 @@ Question:
 {question}
 
 Instructions:
-
-1. Use ONLY the provided context.
-2. If answer is unavailable in context return:
+1. Answer ONLY using the provided context.
+2. Keep the answer clear and concise.
+3. If the answer is not available in the context, return ONLY:
 
 NOT_FOUND
 """
@@ -33,7 +41,9 @@ NOT_FOUND
         ]
     )
 
-    return response.choices[0].message.content.strip()
+    answer = response.choices[0].message.content.strip()
+
+    return answer
 
 
 def generate_general_answer(question):
@@ -46,15 +56,13 @@ def generate_general_answer(question):
             {
                 "role": "system",
                 "content": """
-You are SmartHealth AI.
+You are SmartHealth AI, a helpful healthcare assistant.
 
 Rules:
-
-- Answer health questions professionally.
-- For non-health questions answer normally.
-- Do NOT force medical context.
-- If user asks names, politics, meanings, greetings, or casual questions, answer naturally.
-- Recommend consulting a doctor only for medical questions.
+- Answer health-related questions professionally.
+- Use previous conversation context when needed.
+- Keep answers concise and easy to understand.
+- If the user asks non-health questions, answer normally.
 """
             },
             {
@@ -70,4 +78,6 @@ Question:
         ]
     )
 
-    return response.choices[0].message.content.strip()
+    answer = response.choices[0].message.content.strip()
+
+    return answer

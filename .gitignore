@@ -4,3 +4,7 @@ __pycache__/
 *.pyc
 node_modules/
 logs/
+backend/db.sqlite3
+backend/chat_history.pdf
+backend/chat_history.txt
+vectorstore/faiss_index/
