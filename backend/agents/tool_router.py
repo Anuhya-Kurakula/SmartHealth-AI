@@ -153,9 +153,7 @@ def route_tool(question):
             "sources": ["Web Search"]
         }
 
-    # Default → RAG
+    # Default → RAG Disabled Mode
     else:
-        return {
-              "answer": generate_general_answer(question),
-        "sources": ["Groq LLM"]
-    }
+
+        return rag_response(question)

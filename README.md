@@ -1,50 +1,41 @@
 # 🏥 SmartHealth AI
 
-An AI-powered **Multi-Tool Health Awareness Assistant** built using **Django, React, RAG, FAISS, Groq LLM, and Agent-Based Tool Routing**.
+An AI-powered **Multi-Tool Health Awareness Assistant** built using **Django, React, Groq LLM, RAG Architecture, FAISS, and Agent-Based Tool Routing**.
 
-SmartHealth AI provides reliable health awareness information using WHO documents, persistent memory, multiple healthcare tools, multilingual voice interaction, and conversational AI.
+SmartHealth AI provides reliable health awareness information through multiple healthcare tools, conversational AI, multilingual voice interaction, and intelligent query routing.
+
+---
+
+# 🌐 Live Demo
+
+### Frontend (Vercel)
+
+https://smart-health-ai-lilac.vercel.app
+
+### Backend API (Render)
+
+https://smarthealth-ai-1.onrender.com
+
+### Sample API Test
+
+https://smarthealth-ai-1.onrender.com/api/chat/?question=health%20tips
 
 ---
 
 # 🚀 Features
 
-## 🔍 Retrieval-Augmented Generation (RAG)
+## 🤖 AI-Powered Health Assistant
 
-* FAISS Vector Database
-* WHO health document retrieval
-* Context-aware answer generation
-* Source attribution
-
----
-
-## 🧠 Conversation Memory
-
-Maintains context across follow-up questions.
-
-Example:
-
-```text
-User: What is migraine?
-User: How is it treated?
-```
+* Groq LLM Integration
+* Conversational Health Support
+* Intelligent Query Routing
+* Source-Based Responses
 
 ---
 
-## 💾 Persistent Database Memory
+## 🧠 Agent-Based Tool Routing
 
-* SQLite-based chat storage
-* Previous conversation retrieval
-* Memory survives server restart
-
----
-
-# 🤖 Multi-Tool Agent System
-
-SmartHealth AI uses an Agent Router to automatically select the appropriate tool.
-
-### ✅ RAG Tool
-
-Answers health-related questions from WHO documents.
+SmartHealth AI automatically routes user questions to the appropriate tool.
 
 ### ✅ BMI Calculator Tool
 
@@ -120,15 +111,71 @@ Example:
 Water intake for 70kg
 ```
 
-### ✅ Database Memory Tool
+### ✅ Web Search Tool
 
-Stores and retrieves previous conversations.
+Supports current and latest information queries.
+
+Example:
+
+```text
+Latest health news
+Who is WHO Director General?
+```
 
 ---
 
-# ⚙️ Agent Executor + Tool Router
+# 📚 Retrieval-Augmented Generation (RAG)
 
-Automatically routes user queries to the correct tool.
+Implemented RAG architecture using:
+
+* FAISS Vector Database
+* LangChain
+* HuggingFace Embeddings
+* Sentence Transformers
+* Query Rewriting
+* Document Reranking
+* Source Attribution
+
+### RAG Pipeline
+
+```text
+User Question
+      ↓
+Query Rewriter
+      ↓
+FAISS Retrieval
+      ↓
+Reranking
+      ↓
+Context Generation
+      ↓
+Groq LLM
+      ↓
+Final Response
+```
+
+> Note: Full RAG pipeline is implemented and tested locally. Current cloud deployment uses Groq fallback mode for stability on free-tier infrastructure.
+
+---
+
+# 🧠 Memory System
+
+### Conversation Memory
+
+Maintains context during conversations.
+
+Example:
+
+```text
+User: What is migraine?
+User: How is it treated?
+```
+
+### Persistent Database Memory
+
+* SQLite Chat Storage
+* Previous Conversation Retrieval
+* Persistent Chat History
 
 ---
 
@@ -138,23 +185,7 @@ Displays:
 
 * Total Chats
 * Recent Conversations
-
----
-
-# 🌙 User Interface Features
-
-### Dark Mode Support
-
-* Light Theme
-* Dark Theme
-
-### Sample Questions
-
-Quick-access predefined questions.
-
-### Recent Questions
-
-Displays previously asked questions.
+* Chat History
 
 ---
 
@@ -166,7 +197,7 @@ Supports browser speech recognition.
 
 ## Text-to-Speech
 
-Reads responses aloud.
+Reads AI responses aloud.
 
 ## Multilingual Support
 
@@ -178,36 +209,43 @@ Supported Languages:
 
 ---
 
-# 📄 Chat Export
+# 🌙 User Interface Features
 
-Supports:
-
-* PDF Export
-* TXT Export
+* Dark Mode
+* Light Mode
+* Sample Questions
+* Recent Questions
+* Chat History
+* Voice Interaction
 
 ---
 
 # 📈 RAG Evaluation
 
-Uses RAGAS metrics:
+Implemented RAG evaluation using:
 
 * Faithfulness
 * Answer Relevancy
 
 ---
 
-# 🛠 Tech Stack
+# 🛠 Technologies Used
 
 ## Frontend
 
-* React
+* React.js
 * Vite
+* JavaScript
+* HTML
 * CSS
 
 ## Backend
 
 * Django
-* Python
+* Django REST Framework
+* Django CORS Headers
+* WhiteNoise
+* Gunicorn
 
 ## AI Stack
 
@@ -215,12 +253,22 @@ Uses RAGAS metrics:
 * Llama 3.3 70B Versatile
 * LangChain
 * FAISS
-* Sentence Transformers
 * HuggingFace Embeddings
+* Sentence Transformers
 
 ## Database
 
 * SQLite
+
+## Deployment
+
+* Vercel
+* Render
+
+## Version Control
+
+* Git
+* GitHub
 
 ---
 
@@ -229,36 +277,55 @@ Uses RAGAS metrics:
 ```text
 SmartHealth-AI/
 │
-├── frontend/
-│   ├── src/
-│   ├── components/
-│   ├── App.jsx
-│   └── App.css
-│
 ├── backend/
+│   │
+│   ├── agents/
+│   │   ├── agent_executor.py
+│   │   ├── tool_router.py
+│   │   ├── rag_tool.py
+│   │   └── tools/
+│   │       ├── bmi_tool.py
+│   │       ├── calculator_tool.py
+│   │       ├── health_tools.py
+│   │       └── web_search_tool.py
+│   │
 │   ├── chatbot/
 │   ├── core/
+│   ├── survey/
+│   │
+│   ├── rag/
+│   │   ├── ingestion/
+│   │   ├── retrieval/
+│   │   ├── reranking/
+│   │   ├── rewriting/
+│   │   ├── generation/
+│   │   ├── memory/
+│   │   ├── evaluation/
+│   │   └── pipeline.py
+│   │
+│   ├── vectorstore/
+│   │   └── faiss_index/
+│   │
+│   ├── voice/
+│   │
+│   ├── requirements.txt
 │   └── manage.py
 │
-├── agents/
-│   ├── agent_executor.py
-│   ├── tool_router.py
-│   └── tools/
+├── frontend/
+│   │
+│   ├── src/
+│   │   ├── api/
+│   │   ├── assets/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   │
+│   ├── package.json
+│   └── vite.config.js
 │
-├── rag/
-│   ├── generation/
-│   ├── memory/
-│   ├── rewriting/
-│   ├── reranking/
-│   ├── evaluation/
-│   └── pipeline.py
-│
-├── vectorstore/
-├── documents/
-├── screenshots/
-├── requirements.txt
 ├── README.md
-└── .env
+└── .gitignore
 ```
 
 ---
@@ -283,11 +350,9 @@ python -m venv venv
 venv\Scripts\activate
 
 pip install -r requirements.txt
-```
 
-### Run Backend
+python manage.py migrate
 
-```bash
 python manage.py runserver
 ```
 
@@ -319,58 +384,147 @@ http://localhost:5173
 
 # 🧪 Sample Questions
 
-## Health Questions
-
 ```text
 What is dengue?
 What are the symptoms of malaria?
-What is first aid?
 How can dengue be prevented?
-```
-
-## BMI Tool
-
-```text
+Give me health tips
+Foods rich in iron
+Exercises for weight loss
+Tell me about Metformin
 BMI for 70kg and 170cm
 ```
 
-## Medicine Tool
-
-```text
-Tell me about Metformin
-```
-
-## Exercise Tool
-
-```text
-Exercises for weight loss
-```
-
-## Nutrition Tool
-
-```text
-Foods rich in iron
-```
-
 ---
 
-# 🏗 Architecture
+# 🏗 System Architecture
 
 ```text
 User
-↓
+ ↓
 React Frontend
-↓
-Django Backend
-↓
+ ↓
+Django REST API
+ ↓
 Agent Router
-↓
-Multiple Tools
-↓
-Groq + FAISS + SQLite
+ ↓
+Tool Selection
+ ↓
+Groq LLM / RAG Pipeline
+ ↓
+SQLite Memory
+ ↓
+Response
 ```
 
 ---
+# 🚀 Deployment
+
+SmartHealth AI is deployed using modern cloud platforms for frontend and backend hosting.
+
+## Frontend Deployment (Vercel)
+
+Frontend is deployed on Vercel.
+
+### Live URL
+
+```text
+https://smart-health-ai-lilac.vercel.app
+```
+
+### Deployment Steps
+
+```bash
+git push origin main
+```
+
+Vercel automatically detects changes and redeploys the frontend.
+
+---
+
+## Backend Deployment (Render)
+
+Backend is deployed on Render.
+
+### Live API URL
+
+```text
+https://smarthealth-ai-1.onrender.com
+```
+
+### API Test Endpoint
+
+```text
+https://smarthealth-ai-1.onrender.com/api/chat/?question=health%20tips
+```
+
+### Render Configuration
+
+**Root Directory**
+
+```text
+backend
+```
+
+**Build Command**
+
+```bash
+pip install -r requirements.txt && python manage.py migrate
+```
+
+**Start Command**
+
+```bash
+gunicorn core.wsgi:application
+```
+
+---
+
+## Deployment Architecture
+
+```text
+React Frontend (Vercel)
+            │
+            ▼
+Django Backend (Render)
+            │
+            ▼
+Agent Router
+            │
+ ┌──────────┼──────────┐
+ │          │          │
+ ▼          ▼          ▼
+Tools      Groq      SQLite
+            │
+            ▼
+      Health Responses
+```
+
+---
+
+## Current Deployment Status
+
+| Component            | Status                              |
+| -------------------- | ----------------------------------- |
+| Frontend (Vercel)    | ✅ Live                              |
+| Backend (Render)     | ✅ Live                              |
+| API Integration      | ✅ Working                           |
+| Groq LLM             | ✅ Working                           |
+| Tool Router          | ✅ Working                           |
+| SQLite Database      | ✅ Working                           |
+| Voice Features       | ✅ Working                           |
+| RAG Architecture     | ✅ Implemented                       |
+| Cloud RAG Deployment | ⚠️ Disabled for Free-Tier Stability |
+
+---
+
+## Notes
+
+* The complete RAG pipeline has been implemented and tested locally.
+* Current cloud deployment uses Groq fallback mode for stable performance on free-tier infrastructure.
+* FAISS indexing, retrieval, reranking, and query rewriting components are included in the codebase.
+ 
+ ----
 
 # 🔮 Future Enhancements
 
@@ -379,8 +533,95 @@ Groq + FAISS + SQLite
 * Docker Deployment
 * Appointment Scheduling
 * Health Risk Prediction
+* Cloud-Based Full RAG Deployment
 
 ---
+
+# ⚠️ Challenges Faced
+
+### 1. RAG Deployment on Cloud
+
+**Challenge:**
+Deploying the complete RAG pipeline on Render Free Tier caused issues due to HuggingFace model loading, FAISS initialization, and memory limitations.
+
+**Solution:**
+Implemented a Groq-based fallback mechanism for cloud deployment while maintaining the complete RAG architecture locally for testing and evaluation.
+
+---
+
+### 2. Large Dependency Management
+
+**Challenge:**
+Libraries such as FAISS, Transformers, Sentence-Transformers, and LangChain increased deployment complexity and build times.
+
+**Solution:**
+Separated core application dependencies from experimental RAG components and optimized deployment configuration.
+
+---
+
+### 3. Tool Routing Logic
+
+**Challenge:**
+Correctly routing user queries to the appropriate tool (BMI, Medicine, Nutrition, Symptom Checker, etc.) without conflicts.
+
+**Solution:**
+Implemented a centralized Agent Router that analyzes user intent and selects the most relevant tool automatically.
+
+---
+
+### 4. Frontend–Backend Integration
+
+**Challenge:**
+Connecting the React frontend hosted on Vercel with the Django backend hosted on Render.
+
+**Solution:**
+Configured API endpoints, CORS settings, and deployment URLs to enable seamless communication between services.
+
+---
+
+### 5. Voice Feature Compatibility
+
+**Challenge:**
+Browser speech recognition behaves differently across browsers and operating systems.
+
+**Solution:**
+Used Web Speech API with fallback handling and multilingual language support.
+
+---
+
+### 6. Context Preservation
+
+**Challenge:**
+Maintaining conversation context across multiple user interactions.
+
+**Solution:**
+Implemented temporary conversation memory and persistent SQLite-based chat history storage.
+
+---
+
+### 7. Deployment Configuration Issues
+
+**Challenge:**
+Managing environment variables, requirements files, build commands, and dependency compatibility during deployment.
+
+**Solution:**
+Configured Render and Vercel deployment settings, optimized requirements, and validated deployment workflows using GitHub integration.
+
+---
+
+# 📚 Key Learnings
+
+* Retrieval-Augmented Generation (RAG) Architecture
+* Vector Databases (FAISS)
+* LangChain Framework
+* Agent-Based AI Systems
+* LLM Integration using Groq
+* Django REST API Development
+* React Frontend Development
+* Cloud Deployment using Render and Vercel
+* Full-Stack AI Application Development
+
+----
 
 # 👨‍💻 Developed By
 
