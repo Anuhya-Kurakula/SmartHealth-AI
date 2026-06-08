@@ -7,6 +7,12 @@ def chat(request):
 
     question = request.GET.get("question")
 
+    if not question:
+        return JsonResponse({
+            "answer": "Please provide a question.",
+            "sources": []
+        })
+
     result = execute_agent(question)
 
     return JsonResponse({

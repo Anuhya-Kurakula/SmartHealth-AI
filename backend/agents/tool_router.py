@@ -17,6 +17,12 @@ from agents.tools.health_tools import (
 
 def route_tool(question):
 
+    if not question:
+        return {
+            "answer": "Please enter a question.",
+            "sources": []
+        }
+
     q = question.lower()
 
     # -------------------
