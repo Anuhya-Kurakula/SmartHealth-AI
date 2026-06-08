@@ -1,16 +1,12 @@
-
 import os
+from dotenv import load_dotenv
 from groq import Groq
-from rag.memory.database_memory import get_recent_chats
-from rag.memory.conversation_memory import get_memory
 
-
-# Initialize Groq client
+load_dotenv()
 
 client = Groq(
-    api_key = "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"
+    api_key=os.getenv("GROQ_API_KEY")
 )
-
 
 def generate_answer(context, question):
 
