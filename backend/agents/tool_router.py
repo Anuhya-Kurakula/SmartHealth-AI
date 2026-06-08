@@ -2,7 +2,7 @@ from agents.tools.calculator_tool import calculate_expression
 from agents.tools.bmi_tool import calculate_bmi
 from agents.tools.web_search_tool import search_web
 
-from rag.generation.llm import generate_general_answer
+from agents.rag_tool import rag_response
 
 from agents.tools.health_tools import (
     symptom_checker,
@@ -34,7 +34,13 @@ def route_tool(question):
         }
 
     # Calculator Tool
-    elif any(op in q for op in ["+", "-", "*", "/", "calculate"]):
+    elif any(op in q for op in [
+        "+",
+        "-",
+        "*",
+        "/",
+        "calculate"
+    ]):
 
         return {
             "answer": calculate_expression(question),
@@ -67,7 +73,7 @@ def route_tool(question):
             "sources": ["Medicine Tool"]
         }
 
-    # Symptom Checker Tool
+    # Symptom Checker
     elif any(word in q for word in [
         "fever",
         "headache",
@@ -82,7 +88,7 @@ def route_tool(question):
             "sources": ["Symptom Checker"]
         }
 
-    # Health Tips Tool
+    # Health Tips
     elif "health tips" in q:
 
         return {
@@ -90,7 +96,7 @@ def route_tool(question):
             "sources": ["Health Tips Tool"]
         }
 
-    # Disease Prevention Tool
+    # Disease Prevention
     elif "prevent" in q:
 
         return {
@@ -147,10 +153,12 @@ def route_tool(question):
             "sources": ["Web Search"]
         }
 
-    # Default → Groq AI
+    # Default → RAG
     else:
 
+        result = rag_response(question)
+
         return {
-            "answer": generate_general_answer(question),
-            "sources": ["Groq LLM"]
+            "answer": result["answer"],
+            "sources": result["sources"]
         }
