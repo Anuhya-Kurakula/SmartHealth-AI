@@ -1,6 +1,9 @@
-from rag.pipeline import ask_question
-
-
 def rag_response(question):
 
-    return ask_question(question)
+    return {
+        "answer": (
+            "RAG is temporarily disabled in deployment. "
+            "Please use Groq-powered tools."
+        ),
+        "sources": ["Deployment Mode"]
+    }

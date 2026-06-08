@@ -1,7 +1,8 @@
 from agents.tools.calculator_tool import calculate_expression
 from agents.tools.bmi_tool import calculate_bmi
-from agents.tools.rag_tool import rag_response
 from agents.tools.web_search_tool import search_web
+
+from rag.generation.llm import generate_general_answer
 
 from agents.tools.health_tools import (
     symptom_checker,
@@ -219,8 +220,16 @@ def route_tool(question):
         }
 
     # -------------------
-    # Default → Hybrid RAG
+    # Default → Groq General Answer
     # -------------------
     else:
 
-        return rag_response(question)
+        return {
+
+            "answer":
+            generate_general_answer(question),
+
+            "sources":
+            ["Groq AI"]
+
+        }
