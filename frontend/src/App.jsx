@@ -19,31 +19,38 @@ function App() {
     "What is dengue?",
     "How can dengue be prevented?",
     "What are the symptoms of malaria?",
-    "What is first aid?"
+    "How to maintain hand hygiene?",
+    "What is first aid?",
+    "Tips for healthy nutrition"
   ];
 
+  // Dark Mode
   useEffect(() => {
+
     if (darkMode) {
+
       document.body.classList.add("dark");
       localStorage.setItem("theme", "dark");
+
     } else {
+
       document.body.classList.remove("dark");
       localStorage.setItem("theme", "light");
+
     }
+
   }, [darkMode]);
 
+  // Auto Scroll
   useEffect(() => {
+
     bottomRef.current?.scrollIntoView({
       behavior: "smooth"
     });
+
   }, [chatHistory]);
 
-  const speakAnswer = (text) => {
-    const speech = new SpeechSynthesisUtterance(text);
-    speech.lang = language;
-    window.speechSynthesis.speak(speech);
-  };
-
+  // Voice Input
   const startListening = () => {
 
     const SpeechRecognition =
@@ -51,7 +58,9 @@ function App() {
       window.webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
-      alert("Speech Recognition not supported");
+
+      alert("Speech Recognition not supported.");
+
       return;
     }
 
@@ -62,12 +71,40 @@ function App() {
     recognition.start();
 
     recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript;
+
+      const transcript =
+        event.results[0][0].transcript;
+
       setQuestion(transcript);
+
+      setTimeout(() => {
+
+        askQuestion(transcript);
+
+      }, 300);
+
     };
+
   };
 
-  const askQuestion = async (inputQuestion = question) => {
+  // Voice Output
+  const speakAnswer = (text) => {
+
+    window.speechSynthesis.cancel();
+
+    const speech =
+      new SpeechSynthesisUtterance(text);
+
+    speech.lang = language;
+
+    window.speechSynthesis.speak(speech);
+
+  };
+
+  // Ask Question
+  const askQuestion = async (
+    inputQuestion = question
+  ) => {
 
     if (!inputQuestion.trim()) return;
 
@@ -81,148 +118,402 @@ function App() {
 
       const data = await response.json();
 
+      const newChat = {
+
+        question: inputQuestion,
+
+        answer:
+          data.answer ||
+          "No response received.",
+
+        sources:
+          data.sources || [],
+
+        time:
+          new Date().toLocaleTimeString()
+
+      };
+
       setChatHistory(prev => [
+
         ...prev,
-        {
-          question: inputQuestion,
-          answer: data.answer,
-          sources: data.sources || [],
-          time: new Date().toLocaleTimeString()
-        }
+
+        newChat
+
       ]);
 
       setQuestion("");
 
-    } catch {
+    }
+
+    catch {
 
       setChatHistory(prev => [
+
         ...prev,
+
         {
+
           question: inputQuestion,
-          answer: "Unable to connect to SmartHealth AI.",
+
+          answer:
+            "Unable to connect to SmartHealth AI.",
+
           sources: [],
-          time: new Date().toLocaleTimeString()
+
+          time:
+            new Date().toLocaleTimeString()
+
         }
+
       ]);
 
     }
 
     setIsTyping(false);
+
   };
 
   return (
 
     <div className="app">
 
+      {/* Sidebar */}
+
       <div className="sidebar">
 
-        <h2>🏥 SmartHealth AI</h2>
+        <h2>🩺 SmartHealth AI</h2>
 
-        <button onClick={() => setChatHistory([])}>
+        <p className="tagline">
+          Your Personal Healthcare Assistant
+        </p>
+
+        <button
+          className="new-chat-btn"
+          onClick={() => setChatHistory([])}
+        >
           + New Chat
         </button>
 
-        <button onClick={() => setDarkMode(!darkMode)}>
-          {darkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
+        <button
+          className="theme-btn"
+          onClick={() => setDarkMode(!darkMode)}
+        >
+          {
+            darkMode
+              ? "☀️ Light Mode"
+              : "🌙 Dark Mode"
+          }
         </button>
 
-        <h3>Sample Questions</h3>
+        <div className="sidebar-section">
 
-        {
-          sampleQuestions.map((q, index) => (
-            <button
-              key={index}
-              onClick={() => askQuestion(q)}
-            >
-              {q}
-            </button>
-          ))
-        }
+          <h3>Sample Questions</h3>
+
+          {
+            sampleQuestions.map(
+              (q, index) => (
+
+                <button
+                  key={index}
+                  className="sample-btn"
+                  onClick={() => askQuestion(q)}
+                >
+                  {q}
+                </button>
+
+              )
+            )
+          }
+
+        </div>
+
+                <div className="sidebar-section">
+
+          <h3>Recent Questions</h3>
+
+          {
+
+            chatHistory.length === 0 ?
+
+              <p>No chats yet</p>
+
+              :
+
+              chatHistory.map(
+
+                (chat, index) => (
+
+                  <div
+                    key={index}
+                    className="history-item"
+                  >
+
+                    {chat.question}
+
+                  </div>
+
+                )
+
+              )
+
+          }
+
+        </div>
 
       </div>
 
+
+      {/* Main Content */}
+
       <div className="main-content">
 
-        <h1>Health Awareness Assistant</h1>
+        <div className="header">
+
+          <h1>
+
+            🩺 SmartHealth AI Assistant
+
+          </h1>
+
+          <p className="subtitle">
+
+            AI-powered healthcare guidance and awareness assistant
+
+          </p>
+
+        </div>
+
 
         <div className="chat-container">
 
           {
-            chatHistory.map((chat, index) => (
 
-              <div key={index}>
+            chatHistory.length === 0 && (
 
-                <div className="user-message">
-                  👤 {chat.question}
-                </div>
+              <div className="welcome">
 
-                <div className="bot-message">
+                <h2>👋 Welcome to SmartHealth AI</h2>
 
-                  🤖 {chat.answer}
+                <p>
 
-                  <br /><br />
+                  Ask health-related questions and receive AI-powered guidance.
 
-                  <button
-                    onClick={() => speakAnswer(chat.answer)}
-                  >
-                    🔊 Speak
-                  </button>
-
-                </div>
+                </p>
 
               </div>
 
-            ))
+            )
+
           }
 
+
           {
-            isTyping && (
-              <div className="bot-message">
-                🤖 Typing...
-              </div>
+
+            chatHistory.map(
+
+              (chat, index) => (
+
+                <div key={index}>
+
+                  <div className="user-message">
+
+                    👤 {chat.question}
+
+                  </div>
+
+
+                  <div className="bot-message">
+
+                    🤖 {chat.answer}
+
+                    <br />
+                    <br />
+
+                    <button
+                      className="speak-btn"
+                      onClick={() =>
+                        speakAnswer(chat.answer)
+                      }
+                    >
+
+                      🔊 Speak
+
+                    </button>
+
+
+                    {
+
+                      chat.sources.length > 0 && (
+
+                        <div className="source-box">
+
+                          <strong>
+
+                            📄 Sources
+
+                          </strong>
+
+                          {
+
+                            chat.sources.map(
+
+                              (source, idx) => (
+
+                                <div key={idx}>
+
+                                  • {source}
+
+                                </div>
+
+                              )
+
+                            )
+
+                          }
+
+                        </div>
+
+                      )
+
+                    }
+
+
+                    <div className="time">
+
+                      {chat.time}
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+              )
+
             )
+
+          }
+
+
+          {
+
+            isTyping && (
+
+              <div className="bot-message">
+
+                🤖 SmartHealth AI is thinking...
+
+              </div>
+
+            )
+
           }
 
           <div ref={bottomRef}></div>
 
         </div>
 
+
+        {/* Language */}
+
         <div className="language-selector">
 
+          <label>🌐 Language:</label>
+
           <select
+
             value={language}
-            onChange={(e) => setLanguage(e.target.value)}
+
+            onChange={(e) =>
+              setLanguage(e.target.value)
+            }
+
           >
-            <option value="en-US">English</option>
-            <option value="te-IN">Telugu</option>
-            <option value="hi-IN">Hindi</option>
+
+            <option value="en-US">
+
+              English
+
+            </option>
+
+            <option value="te-IN">
+
+              Telugu
+
+            </option>
+
+            <option value="hi-IN">
+
+              Hindi
+
+            </option>
+
           </select>
 
         </div>
 
+
+        {/* Input */}
+
         <div className="input-area">
 
           <input
+
             type="text"
+
+            placeholder="Type your health question here..."
+
             value={question}
-            placeholder="Ask a health question..."
-            onChange={(e) => setQuestion(e.target.value)}
+
+            onChange={(e) =>
+              setQuestion(e.target.value)
+            }
+
+            onKeyDown={(e) =>
+              e.key === "Enter" &&
+              askQuestion()
+            }
+
           />
 
-          <button onClick={() => askQuestion()}>
-            Send
+
+          <button
+            onClick={() => askQuestion()}
+          >
+
+            ➤ Send
+
           </button>
 
-          <button onClick={startListening}>
+
+          <button
+
+            className="voice-btn"
+
+            onClick={startListening}
+
+          >
+
             🎤
+
           </button>
+
+        </div>
+
+
+        <div className="footer">
+
+          Powered by Groq LLM • Django • React
 
         </div>
 
       </div>
 
     </div>
+
   );
+
 }
 
 export default App;
