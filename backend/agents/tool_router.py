@@ -153,7 +153,8 @@ def route_tool(question):
             "sources": ["Web Search"]
         }
 
-    # Default → RAG Disabled Mode
-    else:
-
-        return rag_response(question)
+    # Default → RAG / general answer
+    return {
+        "answer": rag_response(question),
+        "sources": ["RAG Tool"]
+    }
