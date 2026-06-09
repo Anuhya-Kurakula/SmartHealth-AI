@@ -19,40 +19,31 @@ function App() {
     "What is dengue?",
     "How can dengue be prevented?",
     "What are the symptoms of malaria?",
-    "How to maintain hand hygiene?",
-    "What is first aid?",
-    "Tips for healthy nutrition"
+    "What is first aid?"
   ];
 
-  // Dark mode
   useEffect(() => {
-
     if (darkMode) {
-
       document.body.classList.add("dark");
       localStorage.setItem("theme", "dark");
-
     } else {
-
       document.body.classList.remove("dark");
       localStorage.setItem("theme", "light");
-
     }
-
   }, [darkMode]);
 
-
-  // Auto scroll
   useEffect(() => {
-
     bottomRef.current?.scrollIntoView({
       behavior: "smooth"
     });
-
   }, [chatHistory]);
 
+  const speakAnswer = (text) => {
+    const speech = new SpeechSynthesisUtterance(text);
+    speech.lang = language;
+    window.speechSynthesis.speak(speech);
+  };
 
-  // Voice Input
   const startListening = () => {
 
     const SpeechRecognition =
@@ -60,9 +51,7 @@ function App() {
       window.webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
-
-      alert("Speech Recognition not supported.");
-
+      alert("Speech Recognition not supported");
       return;
     }
 
@@ -73,444 +62,159 @@ function App() {
     recognition.start();
 
     recognition.onresult = (event) => {
-
-      const transcript =
-        event.results[0][0].transcript;
-
+      const transcript = event.results[0][0].transcript;
       setQuestion(transcript);
-
-      setTimeout(() => {
-
-        askQuestion(transcript);
-
-      }, 300);
-
     };
-
-    recognition.onerror = (event) => {
-
-      if (event.error !== "aborted") {
-
-        alert(event.error);
-
-      }
-
-    };
-
   };
 
-
-  // Voice Output
-  const speakAnswer = (text) => {
-
-    window.speechSynthesis.cancel();
-
-    const speech =
-      new SpeechSynthesisUtterance(text);
-
-    speech.lang = language;
-
-    window.speechSynthesis.speak(speech);
-
-  };
-
-
-  const askQuestion = async (
-    inputQuestion = question
-  ) => {
+  const askQuestion = async (inputQuestion = question) => {
 
     if (!inputQuestion.trim()) return;
 
     setIsTyping(true);
-        try {
+
+    try {
 
       const response = await fetch(
-
-        `http://127.0.0.1:8000/api/chat/?question=${encodeURIComponent(
-          inputQuestion
-        )}`
-
+        `https://smarthealth-ai-1.onrender.com/api/chat/?question=${encodeURIComponent(inputQuestion)}`
       );
 
       const data = await response.json();
 
-      const newChat = {
-
-        question: inputQuestion,
-
-        answer:
-          data.answer ||
-          "No response received.",
-
-        sources:
-          data.sources || [],
-
-        time:
-          new Date().toLocaleTimeString()
-
-      };
-
       setChatHistory(prev => [
-
         ...prev,
-
-        newChat
-
+        {
+          question: inputQuestion,
+          answer: data.answer,
+          sources: data.sources || [],
+          time: new Date().toLocaleTimeString()
+        }
       ]);
 
       setQuestion("");
 
-    }
-
-    catch {
+    } catch {
 
       setChatHistory(prev => [
-
         ...prev,
-
         {
-
           question: inputQuestion,
-
-          answer:
-            "Unable to connect to SmartHealth AI.",
-
+          answer: "Unable to connect to SmartHealth AI.",
           sources: [],
-
-          time:
-            new Date().toLocaleTimeString()
-
+          time: new Date().toLocaleTimeString()
         }
-
       ]);
 
     }
 
     setIsTyping(false);
-
   };
-
 
   return (
 
     <div className="app">
 
-      {/* Sidebar */}
-
       <div className="sidebar">
 
         <h2>🏥 SmartHealth AI</h2>
 
-        <button
-          className="new-chat-btn"
-          onClick={() => setChatHistory([])}
-        >
+        <button onClick={() => setChatHistory([])}>
           + New Chat
         </button>
 
-        <button
-          className="theme-btn"
-          onClick={() => setDarkMode(!darkMode)}
-        >
-          {
-            darkMode
-              ? "☀️ Light Mode"
-              : "🌙 Dark Mode"
-          }
+        <button onClick={() => setDarkMode(!darkMode)}>
+          {darkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
         </button>
 
+        <h3>Sample Questions</h3>
 
-        <div className="sidebar-section">
-
-          <h3>Sample Questions</h3>
-
-          {
-
-            sampleQuestions.map(
-
-              (q, index) => (
-
-                <button
-                  key={index}
-                  className="sample-btn"
-                  onClick={() => askQuestion(q)}
-                >
-
-                  {q}
-
-                </button>
-
-              )
-
-            )
-
-          }
-
-        </div>
-
-
-        <div className="sidebar-section">
-
-          <h3>Recent Questions</h3>
-
-          {
-
-            chatHistory.length === 0 ?
-
-              <p>No chats yet</p>
-
-              :
-
-              chatHistory.map(
-
-                (chat, index) => (
-
-                  <div
-                    key={index}
-                    className="history-item"
-                  >
-
-                    {chat.question}
-
-                  </div>
-
-                )
-
-              )
-
-          }
-
-        </div>
+        {
+          sampleQuestions.map((q, index) => (
+            <button
+              key={index}
+              onClick={() => askQuestion(q)}
+            >
+              {q}
+            </button>
+          ))
+        }
 
       </div>
 
-
-      {/* Main Content */}
-
       <div className="main-content">
 
-        <div className="header">
-
-          <h1>
-
-            Health Awareness Assistant
-
-          </h1>
-
-        </div>
-
+        <h1>Health Awareness Assistant</h1>
 
         <div className="chat-container">
-                    {
-
-            chatHistory.length === 0 && (
-
-              <div className="welcome">
-
-                <h2>Welcome 👋</h2>
-
-                <p>
-
-                  Ask any health-related question based on WHO documents.
-
-                </p>
-
-              </div>
-
-            )
-
-          }
-
 
           {
+            chatHistory.map((chat, index) => (
 
-            chatHistory.map(
+              <div key={index}>
 
-              (chat, index) => (
+                <div className="user-message">
+                  👤 {chat.question}
+                </div>
 
-                <div key={index}>
+                <div className="bot-message">
 
-                  <div className="user-message">
+                  🤖 {chat.answer}
 
-                    👤 {chat.question}
+                  <br /><br />
 
-                  </div>
-
-
-                  <div className="bot-message">
-
-                    🤖 {chat.answer}
-
-                    <br />
-                    <br />
-
-                    <button
-                      className="speak-btn"
-                      onClick={() =>
-                        speakAnswer(chat.answer)
-                      }
-                    >
-
-                      🔊 Speak
-
-                    </button>
-
-
-                    {
-
-                      chat.sources.length > 0 && (
-
-                        <div className="source-box">
-
-                          <strong>
-
-                            Sources:
-
-                          </strong>
-
-                          {
-
-                            chat.sources.map(
-
-                              (source, idx) => (
-
-                                <div key={idx}>
-
-                                  📄 {source}
-
-                                </div>
-
-                              )
-
-                            )
-
-                          }
-
-                        </div>
-
-                      )
-
-                    }
-
-
-                    <div className="time">
-
-                      {chat.time}
-
-                    </div>
-
-                  </div>
+                  <button
+                    onClick={() => speakAnswer(chat.answer)}
+                  >
+                    🔊 Speak
+                  </button>
 
                 </div>
 
-              )
-
-            )
-
-          }
-
-
-          {
-
-            isTyping && (
-
-              <div className="bot-message">
-
-                🤖 Typing...
-
               </div>
 
-            )
+            ))
+          }
 
+          {
+            isTyping && (
+              <div className="bot-message">
+                🤖 Typing...
+              </div>
+            )
           }
 
           <div ref={bottomRef}></div>
 
         </div>
 
-
-        {/* Language */}
-
         <div className="language-selector">
 
-          <label>🌐 Language:</label>
-
           <select
-
             value={language}
-
-            onChange={(e) =>
-              setLanguage(e.target.value)
-            }
-
+            onChange={(e) => setLanguage(e.target.value)}
           >
-
-            <option value="en-US">
-
-              English
-
-            </option>
-
-            <option value="te-IN">
-
-              Telugu
-
-            </option>
-
-            <option value="hi-IN">
-
-              Hindi
-
-            </option>
-
+            <option value="en-US">English</option>
+            <option value="te-IN">Telugu</option>
+            <option value="hi-IN">Hindi</option>
           </select>
 
         </div>
 
-
-        {/* Input */}
-
         <div className="input-area">
 
           <input
-
             type="text"
-
-            placeholder="Ask a health question..."
-
             value={question}
-
-            onChange={(e) =>
-              setQuestion(e.target.value)
-            }
-
-            onKeyDown={(e) =>
-              e.key === "Enter" &&
-              askQuestion()
-            }
-
+            placeholder="Ask a health question..."
+            onChange={(e) => setQuestion(e.target.value)}
           />
 
-
-          <button
-            onClick={() => askQuestion()}
-          >
-
+          <button onClick={() => askQuestion()}>
             Send
-
           </button>
 
-
-          <button
-
-            className="voice-btn"
-
-            onClick={startListening}
-
-          >
-
+          <button onClick={startListening}>
             🎤
-
           </button>
 
         </div>
@@ -518,10 +222,7 @@ function App() {
       </div>
 
     </div>
-
   );
-
 }
 
 export default App;
-       
