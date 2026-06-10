@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import "./App.css";
+import { getChatResponse } from "./api/chatapi";
 
 function App() {
 
@@ -112,11 +113,7 @@ function App() {
     try {
 
       // Local backend
-      const response = await fetch(
-  `${import.meta.env.VITE_API_URL}/api/chat/?question=${encodeURIComponent(inputQuestion)}`
-);
-
-      const data = await response.json();
+      const data = await getChatResponse(inputQuestion);
 
       const newChat = {
 
