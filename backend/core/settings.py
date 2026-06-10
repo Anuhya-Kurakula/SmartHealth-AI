@@ -14,11 +14,9 @@ SECRET_KEY = os.getenv(
     "django-insecure-local-development-key"
 )
 
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = [
-    "smarthealth-ai-production-0a08.up.railway.app"
-]
+ALLOWED_HOSTS = [ " * " ]
 
 # Installed Apps
 INSTALLED_APPS = [
@@ -143,9 +141,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CORS
 # CORS
-CORS_ALLOWED_ORIGINS = [
-    "https://smart-health-ai-lilac.vercel.app"
-]
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Security Headers
 SECURE_PROXY_SSL_HEADER = (
@@ -157,7 +154,6 @@ SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://smart-health-ai-lilac.vercel.app"
 ]
 
 # Media Files
