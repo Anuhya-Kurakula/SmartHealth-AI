@@ -113,8 +113,8 @@ function App() {
 
       // Local backend
       const response = await fetch(
-        `http://127.0.0.1:8000/api/chat/?question=${encodeURIComponent(inputQuestion)}`
-      );
+  `${import.meta.env.VITE_API_URL}/api/chat/?question=${encodeURIComponent(inputQuestion)}`
+);
 
       const data = await response.json();
 
