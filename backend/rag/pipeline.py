@@ -21,7 +21,7 @@ FAISS_PATH = BASE_DIR / "vectorstore" / "faiss_index"
 
 
 embeddings = HuggingFaceEmbeddings(
-    model_name="sentence-transformers/all-MiniLM-L6-v2",
+    model_name=str(BASE_DIR / "models" / "all-MiniLM-L6-v2"),
     model_kwargs={
         "local_files_only": True
     }
