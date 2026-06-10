@@ -15,6 +15,14 @@ langchain-core
 langchain-huggingface
 
 sentence-transformers
+transformers==5.10.2
+torch
+
+langchain
+langchain-community
+langchain-huggingface
+faiss-cpu
+sentence-transformers
 transformers
 torch
 

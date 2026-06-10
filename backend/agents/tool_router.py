@@ -1,3 +1,5 @@
+from unittest import result
+
 from agents.tools.calculator_tool import calculate_expression
 from agents.tools.bmi_tool import calculate_bmi
 from agents.tools.web_search_tool import search_web
@@ -154,7 +156,9 @@ def route_tool(question):
         }
 
     # Default → RAG / general answer
+    result = rag_response(question)
+
     return {
-        "answer": rag_response(question),
-        "sources": ["RAG Tool"]
-    }
+    "answer": result["answer"],
+    "sources": result["sources"]
+}

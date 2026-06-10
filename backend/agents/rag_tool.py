@@ -1,9 +1,4 @@
+from rag.pipeline import ask_question
+
 def rag_response(question):
-
-    return {
-
-        "answer": "RAG is temporarily disabled for deployment.",
-
-        "sources": ["Deployment Mode"]
-
-    }
+    return ask_question(question)

@@ -49,8 +49,7 @@ function App() {
     });
 
   }, [chatHistory]);
-
-  // Voice Input
+    // Voice Input
   const startListening = () => {
 
     const SpeechRecognition =
@@ -112,8 +111,9 @@ function App() {
 
     try {
 
+      // Local backend
       const response = await fetch(
-        `https://smarthealth-ai-1.onrender.com/api/chat/?question=${encodeURIComponent(inputQuestion)}`
+        `http://127.0.0.1:8000/api/chat/?question=${encodeURIComponent(inputQuestion)}`
       );
 
       const data = await response.json();
@@ -177,9 +177,7 @@ function App() {
   return (
 
     <div className="app">
-
-      {/* Sidebar */}
-
+            {/* Sidebar */}
       <div className="sidebar">
 
         <h2>🩺 SmartHealth AI</h2>
@@ -211,24 +209,26 @@ function App() {
           <h3>Sample Questions</h3>
 
           {
-            sampleQuestions.map(
-              (q, index) => (
 
-                <button
-                  key={index}
-                  className="sample-btn"
-                  onClick={() => askQuestion(q)}
-                >
-                  {q}
-                </button>
+            sampleQuestions.map((q, index) => (
 
-              )
-            )
+              <button
+                key={index}
+                className="sample-btn"
+                onClick={() => askQuestion(q)}
+              >
+
+                {q}
+
+              </button>
+
+            ))
+
           }
 
         </div>
 
-                <div className="sidebar-section">
+        <div className="sidebar-section">
 
           <h3>Recent Questions</h3>
 
@@ -240,22 +240,18 @@ function App() {
 
               :
 
-              chatHistory.map(
+              chatHistory.map((chat, index) => (
 
-                (chat, index) => (
+                <div
+                  key={index}
+                  className="history-item"
+                >
 
-                  <div
-                    key={index}
-                    className="history-item"
-                  >
+                  {chat.question}
 
-                    {chat.question}
+                </div>
 
-                  </div>
-
-                )
-
-              )
+              ))
 
           }
 
@@ -265,16 +261,11 @@ function App() {
 
 
       {/* Main Content */}
-
       <div className="main-content">
 
         <div className="header">
 
-          <h1>
-
-            🩺 SmartHealth AI Assistant
-
-          </h1>
+          <h1>🩺 SmartHealth AI Assistant</h1>
 
           <p className="subtitle">
 
@@ -297,7 +288,7 @@ function App() {
 
                 <p>
 
-                  Ask health-related questions and receive AI-powered guidance.
+                  Ask health-related questions powered by WHO documents and AI.
 
                 </p>
 
@@ -310,88 +301,71 @@ function App() {
 
           {
 
-            chatHistory.map(
+            chatHistory.map((chat, index) => (
 
-              (chat, index) => (
+              <div key={index}>
 
-                <div key={index}>
+                <div className="user-message">
 
-                  <div className="user-message">
+                  👤 {chat.question}
 
-                    👤 {chat.question}
+                </div>
 
-                  </div>
+                <div className="bot-message">
 
+                  🤖 {chat.answer}
 
-                  <div className="bot-message">
+                  <br />
+                  <br />
 
-                    🤖 {chat.answer}
+                  <button
+                    className="speak-btn"
+                    onClick={() => speakAnswer(chat.answer)}
+                  >
 
-                    <br />
-                    <br />
+                    🔊 Speak
 
-                    <button
-                      className="speak-btn"
-                      onClick={() =>
-                        speakAnswer(chat.answer)
-                      }
-                    >
+                  </button>
 
-                      🔊 Speak
+                  {
 
-                    </button>
+                    chat.sources.length > 0 && (
 
+                      <div className="source-box">
 
-                    {
+                        <strong>📄 Sources</strong>
 
-                      chat.sources.length > 0 && (
+                        {
 
-                        <div className="source-box">
+                          chat.sources.map((source, idx) => (
 
-                          <strong>
+                            <div key={idx}>
 
-                            📄 Sources
+                              • {source}
 
-                          </strong>
+                            </div>
 
-                          {
+                          ))
 
-                            chat.sources.map(
+                        }
 
-                              (source, idx) => (
+                      </div>
 
-                                <div key={idx}>
+                    )
 
-                                  • {source}
+                  }
 
-                                </div>
+                  <div className="time">
 
-                              )
-
-                            )
-
-                          }
-
-                        </div>
-
-                      )
-
-                    }
-
-
-                    <div className="time">
-
-                      {chat.time}
-
-                    </div>
+                    {chat.time}
 
                   </div>
 
                 </div>
 
-              )
+              </div>
 
-            )
+            ))
 
           }
 
@@ -416,38 +390,20 @@ function App() {
 
 
         {/* Language */}
-
         <div className="language-selector">
 
           <label>🌐 Language:</label>
 
           <select
-
             value={language}
-
             onChange={(e) =>
               setLanguage(e.target.value)
             }
-
           >
 
-            <option value="en-US">
-
-              English
-
-            </option>
-
-            <option value="te-IN">
-
-              Telugu
-
-            </option>
-
-            <option value="hi-IN">
-
-              Hindi
-
-            </option>
+            <option value="en-US">English</option>
+            <option value="te-IN">Telugu</option>
+            <option value="hi-IN">Hindi</option>
 
           </select>
 
@@ -455,28 +411,20 @@ function App() {
 
 
         {/* Input */}
-
         <div className="input-area">
 
           <input
-
             type="text"
-
             placeholder="Type your health question here..."
-
             value={question}
-
             onChange={(e) =>
               setQuestion(e.target.value)
             }
-
             onKeyDown={(e) =>
               e.key === "Enter" &&
               askQuestion()
             }
-
           />
-
 
           <button
             onClick={() => askQuestion()}
@@ -486,13 +434,9 @@ function App() {
 
           </button>
 
-
           <button
-
             className="voice-btn"
-
             onClick={startListening}
-
           >
 
             🎤
@@ -504,7 +448,7 @@ function App() {
 
         <div className="footer">
 
-          Powered by Groq LLM • Django • React
+          Powered by Groq • Django • React • RAG
 
         </div>
 
@@ -517,3 +461,4 @@ function App() {
 }
 
 export default App;
+    

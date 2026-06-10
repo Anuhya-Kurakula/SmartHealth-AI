@@ -198,3 +198,23 @@ body.dark .input-area input {
 .input-area button:hover {
   background: #0d9488;
 }
+
+.subtitle {
+
+  color: gray;
+
+  margin-top: -10px;
+
+}
+
+.footer {
+
+  margin-top: 20px;
+
+  text-align: center;
+
+  color: gray;
+
+  font-size: 14px;
+
+}

@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 from langchain_community.vectorstores import FAISS
@@ -56,14 +57,14 @@ def ask_question(question):
 
     print("Best Score:", best_score)
 
-    # Lower score = better match
-    if best_score < 0.7:
+    # Lower score = better match)
+
+    if best_score < 1.7:
 
         docs = [
-            doc
-            for doc, score in docs_with_scores
-        ]
-
+        doc
+        for doc, score in docs_with_scores
+    ]
         context = "\n\n".join(
             doc.page_content
             for doc in docs
@@ -89,14 +90,13 @@ def ask_question(question):
         else:
 
             sources = list(
-                set(
-                    doc.metadata.get(
-                        "source",
-                        "Unknown"
-                    )
-                    for doc in docs
-                )
-            )
+         set(
+        os.path.basename(
+            doc.metadata.get("source", "Unknown")
+        )
+        for doc in docs
+    )
+)
 
     else:
 
