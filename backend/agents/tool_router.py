@@ -1,10 +1,6 @@
-from unittest import result
-
 from agents.tools.calculator_tool import calculate_expression
 from agents.tools.bmi_tool import calculate_bmi
 from agents.tools.web_search_tool import search_web
-
-from agents.rag_tool import rag_response
 
 from agents.tools.health_tools import (
     symptom_checker,
@@ -29,21 +25,13 @@ def route_tool(question):
 
     # BMI Tool
     if "bmi" in q:
-
         return {
             "answer": calculate_bmi(question),
             "sources": ["BMI Tool"]
         }
 
     # Calculator Tool
-    elif any(op in q for op in [
-        "+",
-        "-",
-        "*",
-        "/",
-        "calculate"
-    ]):
-
+    elif any(op in q for op in ["+", "-", "*", "/", "calculate"]):
         return {
             "answer": calculate_expression(question),
             "sources": ["Calculator Tool"]
@@ -60,14 +48,13 @@ def route_tool(question):
     ]):
 
         medicine_name = (
-            q
-            .replace("tell me about", "")
-            .replace("uses of", "")
-            .replace("side effects of", "")
-            .replace("medicine", "")
-            .replace("tablet", "")
-            .replace("drug", "")
-            .strip()
+            q.replace("tell me about", "")
+             .replace("uses of", "")
+             .replace("side effects of", "")
+             .replace("medicine", "")
+             .replace("tablet", "")
+             .replace("drug", "")
+             .strip()
         )
 
         return {
@@ -92,7 +79,6 @@ def route_tool(question):
 
     # Health Tips
     elif "health tips" in q:
-
         return {
             "answer": health_tips()["answer"],
             "sources": ["Health Tips Tool"]
@@ -100,7 +86,6 @@ def route_tool(question):
 
     # Disease Prevention
     elif "prevent" in q:
-
         return {
             "answer": prevention_tool(question)["answer"],
             "sources": ["Disease Prevention Tool"]
@@ -114,7 +99,6 @@ def route_tool(question):
         "protein",
         "vitamin"
     ]):
-
         return {
             "answer": nutrition_tool(question)["answer"],
             "sources": ["Nutrition Tool"]
@@ -127,7 +111,6 @@ def route_tool(question):
         "weight loss",
         "belly fat"
     ]):
-
         return {
             "answer": exercise_tool(question)["answer"],
             "sources": ["Exercise Tool"]
@@ -135,7 +118,6 @@ def route_tool(question):
 
     # Water Intake Tool
     elif "water" in q:
-
         return {
             "answer": water_intake(question)["answer"],
             "sources": ["Water Intake Tool"]
@@ -149,16 +131,17 @@ def route_tool(question):
         "news",
         "who is"
     ]):
-
         return {
             "answer": search_web(question),
             "sources": ["Web Search"]
         }
 
-    # Default → RAG / general answer
+    # Lazy import for RAG
+    from agents.rag_tool import rag_response
+
     result = rag_response(question)
 
     return {
-    "answer": result["answer"],
-    "sources": result["sources"]
-}
+        "answer": result["answer"],
+        "sources": result["sources"]
+    }

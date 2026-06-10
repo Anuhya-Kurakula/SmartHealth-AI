@@ -1,9 +1,11 @@
 from django.http import JsonResponse
-from agents.agent_executor import execute_agent
 from chatbot.models import ChatHistory
 
 
 def chat(request):
+
+    # Lazy import
+    from agents.agent_executor import execute_agent
 
     question = request.GET.get("question")
 
