@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import "./App.css";
-import { getChatResponse } from "./api/chatapi";
+import { getChatResponse } from "./api/chatApi";
 
 function App() {
 
