@@ -1,9 +1,18 @@
 import os
+import re
+from pathlib import Path
+
+from dotenv import load_dotenv
 from groq import Groq
+
+# Load .env from backend folder
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+load_dotenv(BASE_DIR / ".env")
 
 client = Groq(
     api_key=os.getenv("GROQ_API_KEY")
 )
+
 
 # -----------------------------------
 # Symptom Checker Tool
@@ -25,23 +34,17 @@ Advise consulting a healthcare professional.
 """
 
     response = client.chat.completions.create(
-
         model="llama-3.3-70b-versatile",
-
         messages=[
             {
                 "role": "user",
                 "content": prompt
             }
         ]
-
     )
 
     return {
-
-        "answer":
-        response.choices[0].message.content
-
+        "answer": response.choices[0].message.content
     }
 
 
@@ -57,23 +60,17 @@ Keep them simple.
 """
 
     response = client.chat.completions.create(
-
         model="llama-3.3-70b-versatile",
-
         messages=[
             {
                 "role": "user",
                 "content": prompt
             }
         ]
-
     )
 
     return {
-
-        "answer":
-        response.choices[0].message.content
-
+        "answer": response.choices[0].message.content
     }
 
 
@@ -89,23 +86,17 @@ Give bullet points.
 """
 
     response = client.chat.completions.create(
-
         model="llama-3.3-70b-versatile",
-
         messages=[
             {
                 "role": "user",
                 "content": prompt
             }
         ]
-
     )
 
     return {
-
-        "answer":
-        response.choices[0].message.content
-
+        "answer": response.choices[0].message.content
     }
 
 
@@ -123,23 +114,17 @@ Provide food suggestions in bullet points.
 """
 
     response = client.chat.completions.create(
-
         model="llama-3.3-70b-versatile",
-
         messages=[
             {
                 "role": "user",
                 "content": prompt
             }
         ]
-
     )
 
     return {
-
-        "answer":
-        response.choices[0].message.content
-
+        "answer": response.choices[0].message.content
     }
 
 
@@ -157,23 +142,17 @@ Use bullet points.
 """
 
     response = client.chat.completions.create(
-
         model="llama-3.3-70b-versatile",
-
         messages=[
             {
                 "role": "user",
                 "content": prompt
             }
         ]
-
     )
 
     return {
-
-        "answer":
-        response.choices[0].message.content
-
+        "answer": response.choices[0].message.content
     }
 
 
@@ -191,23 +170,11 @@ def water_intake(question):
         water = round(weight * 0.035, 2)
 
         return {
-
-            "answer":
-
-            f"""
-Recommended Water Intake:
-
-{water} liters/day
-            """
-
+            "answer": f"Recommended Water Intake: {water} liters/day"
         }
 
     return {
-
-        "answer":
-
-        "Please provide your weight in kilograms."
-
+        "answer": "Please provide your weight in kilograms."
     }
 
 
@@ -234,22 +201,15 @@ Do NOT replace professional medical advice.
 """
 
     response = client.chat.completions.create(
-
         model="llama-3.3-70b-versatile",
-
         messages=[
             {
                 "role": "user",
                 "content": prompt
             }
         ]
-
     )
 
     return {
-
-        "answer":
-
-        response.choices[0].message.content
-
+        "answer": response.choices[0].message.content
     }

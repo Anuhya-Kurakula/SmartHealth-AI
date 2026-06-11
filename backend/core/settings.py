@@ -38,7 +38,6 @@ INSTALLED_APPS = [
 
 # Middleware
 MIDDLEWARE = [
-
     'corsheaders.middleware.CorsMiddleware',
 
     'django.middleware.security.SecurityMiddleware',
@@ -71,13 +70,11 @@ TEMPLATES = [
 
         'OPTIONS': {
             'context_processors': [
-
                 'django.template.context_processors.request',
 
                 'django.contrib.auth.context_processors.auth',
 
                 'django.contrib.messages.context_processors.messages',
-
             ],
         },
     },
@@ -127,7 +124,6 @@ USE_I18N = True
 USE_TZ = True
 
 # Static Files
-
 STATIC_URL = 'static/'
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
@@ -140,28 +136,21 @@ STATICFILES_STORAGE = (
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CORS
-# CORS
-
 CORS_ALLOW_ALL_ORIGINS = True
 
 # Security Headers
 SECURE_PROXY_SSL_HEADER = (
-    ('HTTP_X_FORWARDED_PROTO', 'https')
+    'HTTP_X_FORWARDED_PROTO',
+    'https'
 )
 
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+# IMPORTANT FOR LOCAL DEVELOPMENT
+SECURE_SSL_REDIRECT = False
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
 
-CSRF_TRUSTED_ORIGINS = [
-]
+CSRF_TRUSTED_ORIGINS = []
 
 # Media Files
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
-
-# Media Files (Optional)
-
-MEDIA_URL = '/media/'
-
 MEDIA_ROOT = BASE_DIR / 'media'

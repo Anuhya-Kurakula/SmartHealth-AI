@@ -15,15 +15,7 @@ langchain-core
 langchain-huggingface
 
 sentence-transformers
-transformers==5.10.2
-torch
-
-langchain
-langchain-community
-langchain-huggingface
-faiss-cpu
-sentence-transformers
-transformers
+transformers==4.55.4
 torch
 
 numpy
